@@ -1,0 +1,16 @@
+import {env} from "cloudflare:workers";
+import {requireStaff} from "../../../../staff-auth";
+import {RECEIPT_PREFIX,parseReceipt} from "../../../../customer-design.mjs";
+import {notFound} from "next/navigation";
+export const dynamic="force-dynamic";
+type Manifest={itemId:number;quantity:number;sides:number;hardwareCode:string;hardwareColor:string;dimensions:{totalWidth:number;totalHeight:number};assets:Array<{role:string;name:string}>};
+export default async function Page({params}:{params:Promise<{id:string}>}) {
+ const {id}=await params;await requireStaff(`/admin/orders/${id}/customer-designs`);
+ const {DB,ORDER_FILES}=env as unknown as {DB:D1Database;ORDER_FILES:R2Bucket};const orderId=Number(id);
+ if(!Number.isInteger(orderId)||orderId<1)notFound();
+ const order=await DB.prepare("SELECT order_number,public_token FROM orders WHERE id=?").bind(orderId).first<{order_number:string;public_token:string}>();if(!order)notFound();
+ const receipts=(await DB.prepare("SELECT id,note,created_at FROM order_status_history WHERE order_id=? AND note LIKE ? ORDER BY id DESC LIMIT 50").bind(orderId,RECEIPT_PREFIX+"%").all<{id:number;note:string;created_at:string}>()).results;
+ const rows=await Promise.all(receipts.map(async row=>{const receipt=parseReceipt(row.note);let manifest:Manifest|null=null;try{if(receipt){const object=await ORDER_FILES.get(`customer-designs/${orderId}/${receipt.storageId}/manifest.json`);manifest=object?await object.json<Manifest>():null}}catch{}return {...row,manifest}}));
+ const labels:Record<string,string>={original_front:"ต้นฉบับหน้า",front:"ภาพหน้าที่จัดแล้ว",original_back:"ต้นฉบับหลัง",back:"ภาพหลังที่จัดแล้ว",preview:"ภาพยืนยัน"};
+ return <main style={{maxWidth:1080,margin:"32px auto",padding:24}}><a href={`/admin/orders/${id}`}>← กลับออเดอร์ {order.order_number}</a><h1 style={{fontSize:30}}>แบบที่ลูกค้าจัดเอง</h1><p>ตรวจภาพต้นฉบับ ขนาด วิธีพิมพ์ และรูห่วงก่อนจัดทำแบบผลิต การรับแบบหน้านี้ไม่อนุมัติผลิตและไม่แก้ยอดออเดอร์อัตโนมัติ</p><p><a href={`/design-keychain?order=${order.public_token}`}>เปิดหน้าดีไซน์สำหรับออเดอร์นี้ ↗</a></p>{!rows.length&&<p>ยังไม่มีแบบที่ลูกค้าส่ง</p>}{rows.map(row=>{const base=`/api/admin/orders/${id}/customer-designs?receipt=${row.id}`,m=row.manifest;return <article key={row.id} style={{background:"white",border:"1px solid #ccd7df",borderRadius:12,padding:24,marginTop:24}}><h2 style={{fontSize:20}}>แบบยืนยัน #{row.id}</h2><p>ส่งให้กราฟิกตรวจเมื่อ {row.created_at} UTC</p>{m?<><p>รายการ #{m.itemId} · {m.dimensions.totalWidth.toFixed(1)} × {m.dimensions.totalHeight.toFixed(1)} มม. · {m.quantity.toLocaleString()} ชิ้น · พิมพ์ {m.sides} ด้าน · อะไหล่ {m.hardwareCode} / {m.hardwareColor}</p><img src={`${base}&role=preview`} alt={`ภาพที่ลูกค้ายืนยัน ${row.id}`} style={{maxWidth:"100%",maxHeight:440,objectFit:"contain"}}/><p><a href={base}>ดาวน์โหลดข้อมูลแบบและราคาประเมิน JSON</a></p><div style={{display:"flex",gap:20,flexWrap:"wrap"}}>{m.assets.filter(a=>a.role!=="preview").map(a=><a key={a.role} href={`${base}&role=${encodeURIComponent(a.role)}`}>{labels[a.role]||a.role}</a>)}</div></>:<p>ยังโหลดไฟล์ชุดนี้ไม่ได้ กรุณาลองเปิดหน้าใหม่</p>}<p>หลังตรวจ ให้ส่งแบบผลิตผ่านขั้น “ส่งแบบให้ลูกค้าอนุมัติ” ในออเดอร์เดิม</p></article>})}</main>;
+}

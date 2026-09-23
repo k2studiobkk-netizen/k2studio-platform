@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">K2STUDIO logo</title>
+  <desc id="desc">Black K, magenta 2 and heart, with STUDIO lettering on a transparent background.</desc>
+
+  <g shape-rendering="geometricPrecision">
+    <text x="150" y="715"
+      fill="#08090B"
+      font-family="Arial Black, Helvetica Neue, Arial, sans-serif"
+      font-size="650"
+      font-weight="900"
+      letter-spacing="-24">K</text>
+
+    <text x="565" y="715"
+      fill="#E50058"
+      font-family="Arial Black, Helvetica Neue, Arial, sans-serif"
+      font-size="650"
+      font-weight="900">2</text>
+
+    <path fill="#E50058" d="M1005 257c-22-35-78-22-78 23 0 51 78 94 78 94s78-43 78-94c0-45-56-58-78-23Z"/>
+
+    <text x="600" y="880"
+      fill="#08090B"
+      font-family="Helvetica Neue, Arial, sans-serif"
+      font-size="91"
+      font-weight="800"
+      letter-spacing="46"
+      text-anchor="middle">STUDIO</text>
+  </g>
+</svg>

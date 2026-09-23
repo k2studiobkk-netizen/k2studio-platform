@@ -1,0 +1,31 @@
+CREATE TABLE `orders` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`order_number` text NOT NULL,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`contact_name` text NOT NULL,
+	`phone` text NOT NULL,
+	`line_id` text DEFAULT '' NOT NULL,
+	`email` text DEFAULT '' NOT NULL,
+	`address` text DEFAULT '' NOT NULL,
+	`province` text DEFAULT '' NOT NULL,
+	`requested_date` text DEFAULT '' NOT NULL,
+	`thickness_mm` text NOT NULL,
+	`width_cm` text NOT NULL,
+	`height_cm` text NOT NULL,
+	`pricing_size_cm` integer NOT NULL,
+	`quantity` integer NOT NULL,
+	`print_sides` integer NOT NULL,
+	`hardware_code` text NOT NULL,
+	`hardware_name` text NOT NULL,
+	`hardware_color` text DEFAULT '' NOT NULL,
+	`packaging_type` text NOT NULL,
+	`artwork_name` text DEFAULT '' NOT NULL,
+	`artwork_key` text DEFAULT '' NOT NULL,
+	`artwork_type` text DEFAULT '' NOT NULL,
+	`estimated_unit_price` text NOT NULL,
+	`estimated_total` text NOT NULL,
+	`price_status` text DEFAULT 'pending_review' NOT NULL,
+	`order_status` text DEFAULT 'waiting_for_artwork_review' NOT NULL
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `orders_order_number_unique` ON `orders` (`order_number`);

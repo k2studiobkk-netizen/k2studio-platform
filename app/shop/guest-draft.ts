@@ -1,0 +1,4 @@
+const DATABASE="k2-customer-draft-v1";
+async function database(){return new Promise<IDBDatabase>((resolve,reject)=>{const request=indexedDB.open(DATABASE,1);request.onupgradeneeded=()=>request.result.createObjectStore("draft");request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
+export async function loadGuestDraft<T>():Promise<T|undefined>{const db=await database();return new Promise((resolve,reject)=>{const tx=db.transaction("draft","readonly");const req=tx.objectStore("draft").get("current");req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);tx.oncomplete=()=>db.close();});}
+export async function saveGuestDraft(value:unknown){const db=await database();return new Promise<void>((resolve,reject)=>{const tx=db.transaction("draft","readwrite");tx.objectStore("draft").put(value,"current");tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>{db.close();reject(tx.error);};});}

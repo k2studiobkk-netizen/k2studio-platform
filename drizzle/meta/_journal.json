@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1786691958450,
+      "tag": "0000_unique_scourge",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1787300107131,
+      "tag": "0001_steep_swordsman",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1787306724039,
+      "tag": "0002_workable_thanos",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1787312496716,
+      "tag": "0003_dizzy_nightshade",
+      "breakpoints": true
+    }
+  ]
+}

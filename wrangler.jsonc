@@ -1,0 +1,75 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "k2studio-community-review",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-05-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "limits": {
+    "cpu_ms": 30000
+  },
+  "routes": [],
+  "assets": {
+    "directory": "./dist/client",
+    "binding": "ASSETS"
+  },
+  "images": {
+    "binding": "IMAGES"
+  },
+  "ai": {
+    "binding": "AI"
+  },
+  "send_email": [
+    { "name": "MEMBER_EMAIL", "allowed_sender_addresses": ["orders@example.com"] }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "k2studio-review",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "./drizzle"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "ORDER_FILES",
+      "bucket_name": "k2studio-review-files"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "BROADCAST_HUB",
+        "class_name": "BroadcastHub"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "broadcast-v1",
+      "new_sqlite_classes": ["BroadcastHub"]
+    }
+  ],
+  "vars": {
+    "MEMBER_EMAIL_FROM": "orders@example.com",
+    "ADMIN_EMAILS": "admin@example.com",
+    "ADMIN_HOSTNAME": "localhost",
+    "CANONICAL_HOSTNAME": "localhost",
+    "PUBLIC_SITE_URL": "http://localhost:8787"
+  },
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.05
+    }
+  },
+  "triggers": {
+    "crons": ["5 * * * *", "0 2 * * *"]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "id": "/admin",
+  "name": "K2 Order — ระบบใบสั่งงาน K2STUDIO",
+  "short_name": "K2 Order",
+  "description": "ระบบใบสั่งงานและติดตามการผลิตของ K2STUDIO",
+  "lang": "th",
+  "start_url": "/admin",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f9efe8",
+  "theme_color": "#111111",
+  "icons": [
+    {
+      "src": "/icons/k2studio-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/k2studio-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/k2studio-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "ระบบหลังบ้าน",
+      "short_name": "หลังบ้าน",
+      "url": "/admin"
+    },
+    {
+      "name": "สร้างใบสั่งงาน",
+      "short_name": "สร้างใบงาน",
+      "url": "/admin/orders/new"
+    }
+  ]
+}

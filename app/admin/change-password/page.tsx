@@ -1,0 +1,3 @@
+import ChangePasswordForm from "./ChangePasswordForm";import{requireStaff}from"../../staff-auth";
+export const dynamic="force-dynamic";
+export default async function ChangePasswordPage({searchParams}:{searchParams:Promise<{returnTo?:string}>}){const user=await requireStaff("/admin/change-password");const{ returnTo}=await searchParams;return <main className="staffLoginPage"><section><img src="/assets/k2sign-logo.png" alt="K2SIGN"/><span>SECURITY</span><h1>ตั้งรหัสผ่านใหม่</h1><p>สวัสดี {user.displayName} กรุณาเปลี่ยนรหัสผ่านชั่วคราวก่อนใช้งาน</p><ChangePasswordForm returnTo={returnTo||"/admin"}/></section></main>}
